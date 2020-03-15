@@ -2,18 +2,15 @@ package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
 import androidx.ui.core.Text
+import androidx.ui.core.toModifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.Column
-import androidx.ui.layout.Container
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
-import androidx.ui.layout.Row
-import androidx.ui.layout.Spacer
+import androidx.ui.graphics.painter.ImagePainter
+import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.res.imageResource
+import androidx.ui.res.loadImageResource
 import androidx.ui.text.font.FontWeight
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -38,14 +35,16 @@ interface AlbumList {
 
         @Composable
         private fun AlbumRow(album: Album, onAlbumSelected: (Album) -> Unit) {
-            val image = imageResource(R.drawable.placeholder)
+            val image = loadImageResource(R.drawable.placeholder)
             val typography = MaterialTheme.typography()
 
             Ripple(bounded = true) {
                 Clickable(onClick = { onAlbumSelected(album) }) {
                     Row(modifier = LayoutPadding(all = 16.dp)) {
                             Container(width = 40.dp, height = 40.dp) {
-                                DrawImage(image)
+                                image.resource.resource?.let {
+                                    Box(modifier = LayoutHeight.Fill + LayoutWidth.Fill + ImagePainter(it).toModifier())
+                                }
                             }
                             Spacer(modifier = LayoutWidth(16.dp))
                             Column {

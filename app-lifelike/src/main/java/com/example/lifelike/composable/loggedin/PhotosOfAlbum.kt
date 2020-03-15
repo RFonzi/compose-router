@@ -2,17 +2,14 @@ package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
 import androidx.ui.core.Text
+import androidx.ui.core.toModifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.Column
-import androidx.ui.layout.Container
-import androidx.ui.layout.LayoutAspectRatio
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.Table
-import androidx.ui.layout.TableColumnWidth
+import androidx.ui.graphics.painter.ImagePainter
+import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
-import androidx.ui.res.imageResource
+import androidx.ui.res.loadImageResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import com.example.lifelike.R
@@ -58,7 +55,7 @@ interface PhotosOfAlbum {
             Text(
                 text = album.name,
                 style = typography.h4,
-                modifier = LayoutPadding(left = 8.dp, top = 16.dp, right = 8.dp, bottom = 4.dp)
+                modifier = LayoutPadding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 4.dp)
             )
         }
 
@@ -69,7 +66,7 @@ interface PhotosOfAlbum {
             Text(
                 text = "${album.photos.size} photos",
                 style = typography.body1,
-                modifier = LayoutPadding(left = 8.dp, right = 8.dp, bottom = 16.dp)
+                modifier = LayoutPadding(start = 8.dp, end = 8.dp, bottom = 16.dp)
             )
         }
 
@@ -79,7 +76,7 @@ interface PhotosOfAlbum {
             val lastIndex = album.photos.lastIndex
             val cols = 4
             val rows = nbPhotos / cols
-            val image = imageResource(R.drawable.placeholder)
+            val image = loadImageResource(R.drawable.placeholder)
 
 
             Container(modifier = LayoutPadding(4.dp)) {
@@ -94,7 +91,9 @@ interface PhotosOfAlbum {
                                 Container(modifier = LayoutPadding(4.dp)) {
                                     Clickable(onClick = { onPhotoSelected(album.photos[j]) }) {
                                         Container(expanded = true, modifier = LayoutAspectRatio(1f)) {
-                                            DrawImage(image)
+                                            image.resource.resource?.let {
+                                                Box(modifier = LayoutHeight.Fill + LayoutWidth.Fill + ImagePainter(it).toModifier())
+                                            }
                                         }
                                     }
                                 }
